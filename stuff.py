@@ -2,7 +2,7 @@
 import csv
 
 
-prompt = input('Enter a query: ')
+# prompt = input('Enter a query: ')
 
 
 def open_file():
@@ -13,15 +13,18 @@ def open_file():
     with open('company_db.csv') as db:
         company_db = csv.reader(db)
         line1 = db.readline()
+        lines = db.readlines()[1:]
+        print(lines)
         line1_len = len(line1.split(','))
-        for val in range(line1_len - 1):
-            list2.append(val)
-        for value in list2:
-            for item in company_db:
-                list1.append(item[value])
-                company_db_dict.update({line1.split(',')[value]: list1[0:len(list1)-1]})
+        for i in line1.split(','):
+            company_db_dict[i.strip()] = []
+            for line in lines:
 
-    return company_db_dict
+    #         for item in company_db:
+    #             list1.append(item[value])
+    #             company_db_dict.update({line1.split(',')[6]: list1[0:len(list1)-1]})
+    #
+    # return company_db_dict
 
 
 def check_tokens(tokens, csv_dict):
@@ -48,6 +51,6 @@ def check_tokens(tokens, csv_dict):
 
 
 file = open_file()
-print(file)
+# print(file)
 
-check_tokens(prompt, file)
+# check_tokens(prompt, file)
