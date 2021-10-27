@@ -53,18 +53,23 @@ def check_tokens(tokens, csv_dict):
             work = False
         elif tokens_s[1] not in lo_op_list:
             work = False
+        elif tokens_s[2] not in csv_dict.get(tokens_s[0]):
+            work = False
     if len(tokens_s) == 7:
         if tokens_s[4] not in key_list:
             work = False
         elif tokens_s[5] not in lo_op_list:
             work = False
+        elif tokens_s[6] not in csv_dict.get(tokens_s[4]):
+            work = False
     if work:
         print('Valid')
-    else:
-        print('Not Valid')
+        return tokens_s
+
 
 
 file = open_file()
 # print(file)
 
-check_tokens(prompt, file)
+tokens_g = check_tokens(prompt, file)
+
