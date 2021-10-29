@@ -35,6 +35,9 @@ def check_tokens(tokens, csv_dict):
             work = False
         elif tokens_s[2] not in csv_dict.get(tokens_s[0]):
             work = False
+        if tokens_s[0] == 'age':
+            if type(eval(tokens_s[2])) is int:
+                work = True
     if len(tokens_s) == 7:
         if tokens_s[4] not in key_list:
             work = False
@@ -42,9 +45,14 @@ def check_tokens(tokens, csv_dict):
             work = False
         elif tokens_s[6] not in csv_dict.get(tokens_s[4]):
             work = False
+        if tokens_s[4] == 'age':
+            if type(eval(tokens_s[6])) is int:
+                work = True
     if work:
         print('Valid')
         return tokens_s
+    else:
+        print('Not Valid')
 
 
 
@@ -52,4 +60,8 @@ file = open_file()
 print(file)
 
 # tokens_g = check_tokens(prompt, file)
+
+# def evaluations(tokens):
+
+
 
