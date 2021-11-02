@@ -1,7 +1,8 @@
 # Look to the slideshow in google classroom for notes
 import csv
 
-# prompt = input('Enter a query: ')
+
+prompt = input('Enter a query: ')
 
 
 ########################################################################################################################
@@ -18,7 +19,30 @@ def open_file():
             for j in range(len(keys)):
                 empty_dict[keys[j]] = i[j]
             company_db_list.append(empty_dict)
+    # print(company_db_list[0])
     return company_db_list
+
+
+def open_file2():
+    company_db_dict = {}
+    list1 = []
+    list2 = []
+    file_row_numb = 0
+    with open('company_db.csv') as db:
+        company_db = csv.reader(db)
+        line1 = db.readline()
+        lines = db.readlines()[1:]
+        keys = []
+        line1_len = len(line1.split(','))
+        for i in line1.split(','):
+            company_db_dict[i.strip()] = []
+            keys.append(i.strip())
+        # print(keys)
+        for row in lines:
+            for j in range(line1_len):
+                # print(j)
+                company_db_dict[keys[j]].append(row.split(',')[j].strip())
+    return company_db_dict
 
 
 def check_tokens(tokens, csv_dict):
@@ -31,9 +55,10 @@ def check_tokens(tokens, csv_dict):
     if len(tokens_s) == 3:
         if tokens_s[0] not in key_list:
             work = False
+            print(f'{tokens_s[0]} is an invalid key')
         elif tokens_s[1] not in lo_op_list:
             work = False
-        elif tokens_s[2] not in csv_dict.get(tokens_s[0]):
+        elif tokens_s[2].capitalize() not in csv_dict.get(tokens_s[0]):
             work = False
         if tokens_s[0] == 'age':
             if type(eval(tokens_s[2])) is int:
@@ -51,17 +76,14 @@ def check_tokens(tokens, csv_dict):
     if work:
         print('Valid')
         return tokens_s
-    else:
-        print('Not Valid')
-
 
 
 file = open_file()
-print(file)
+# print(file)
 
-# tokens_g = check_tokens(prompt, file)
+file2 = open_file2()
+# print(file2)
+
+tokens_g = check_tokens(prompt, file2)
 
 # def evaluations(tokens):
-
-
-
