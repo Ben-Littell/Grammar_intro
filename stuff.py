@@ -1,7 +1,6 @@
 # Look to the slideshow in google classroom for notes
 import csv
 
-
 prompt = input('Enter a query: ')
 
 
@@ -60,7 +59,7 @@ def check_tokens(tokens, csv_dict):
             work = False
         elif tokens_s[2].capitalize() not in csv_dict.get(tokens_s[0]):
             work = False
-        if tokens_s[0] == 'age':
+        if tokens_s[0] == 'age' or tokens_s[0] == 'salary':
             if type(eval(tokens_s[2])) is int:
                 work = True
     if len(tokens_s) == 7:
@@ -70,15 +69,23 @@ def check_tokens(tokens, csv_dict):
             work = False
         elif tokens_s[6] not in csv_dict.get(tokens_s[4]):
             work = False
-        if tokens_s[4] == 'age':
+        if tokens_s[4] == 'age' or tokens_s[4] == 'salary':
             if type(eval(tokens_s[6])) is int:
                 work = True
+        else:
+            work = False
     if work:
         print('Valid')
         return tokens_s
 
 
-file = open_file()
+def evaluations(tokens, file):
+
+    if len(tokens) == 3:
+        token_str = f'{tokens[0]}'
+
+
+file1 = open_file()
 # print(file)
 
 file2 = open_file2()
@@ -86,4 +93,4 @@ file2 = open_file2()
 
 tokens_g = check_tokens(prompt, file2)
 
-# def evaluations(tokens):
+evaluations(tokens_g, file1)
