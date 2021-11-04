@@ -14,6 +14,7 @@ def open_file():
         company_db = list(csv.reader(db))
         keys = company_db[0]
         for i in company_db[1:]:
+            # print(i)
             empty_dict = {}
             for j in range(len(keys)):
                 empty_dict[keys[j]] = i[j]
@@ -62,6 +63,9 @@ def check_tokens(tokens, csv_dict):
         if tokens_s[0] == 'age' or tokens_s[0] == 'salary':
             if type(eval(tokens_s[2])) is int:
                 work = True
+        if tokens_s[0] == 'date':
+            if len(tokens_s[2]) == 10:
+                work = True
     if len(tokens_s) == 7:
         if tokens_s[4] not in key_list:
             work = False
@@ -80,6 +84,7 @@ def check_tokens(tokens, csv_dict):
 
 
 def evaluations(tokens, file):
+    # print(tokens)
     for item in file:
         # print(item.get(tokens[0]))
         if len(tokens) == 3:
@@ -88,14 +93,23 @@ def evaluations(tokens, file):
                 # print(token_str)
                 if eval(token_str1):
                     print(item)
-            else:
-                token_str2 = f'{item[tokens[0]]} {tokens[1]} {tokens[2]}'
+            if tokens[0] == 'date':
+                date_split = tokens[2].split('/')
+                new_date = date_split[2] + date_split[0] + date_split[1]
+                date_csv_s = item[tokens[0]].split('/')
+                new_date_csv = date_csv_s[2] + date_csv_s[0] + date_csv_s[1]
+                token_str2 = f'{new_date_csv} {tokens[1]} {new_date}'
                 if eval(token_str2):
+                    print(item)
+            else:
+                token_str3 = f'{item}[\'{tokens[0]}\'] {tokens[1]} \'{tokens[2].capitalize()}\''
+                # print(token_str2)
+                if eval(token_str3):
                     print(item)
 
 
 file1 = open_file()
-# print(file)
+# print(file1)
 
 file2 = open_file2()
 # print(file2)
