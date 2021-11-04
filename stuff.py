@@ -80,9 +80,18 @@ def check_tokens(tokens, csv_dict):
 
 
 def evaluations(tokens, file):
-
-    if len(tokens) == 3:
-        token_str = f'{tokens[0]}'
+    for item in file:
+        # print(item.get(tokens[0]))
+        if len(tokens) == 3:
+            if tokens[0] == 'age' or tokens[0] == 'salary':
+                token_str1 = f'{item[tokens[0]]} {tokens[1]} {tokens[2]}'
+                # print(token_str)
+                if eval(token_str1):
+                    print(item)
+            else:
+                token_str2 = f'{item[tokens[0]]} {tokens[1]} {tokens[2]}'
+                if eval(token_str2):
+                    print(item)
 
 
 file1 = open_file()
