@@ -146,7 +146,7 @@ def evaluations(tokens, file):
                 # print(token_str2)
                 if eval(token_str3):
                     work_list1.append(item)
-            if tokens[4] == 'and':
+            if tokens[3] == 'and':
                 if tokens[4] == 'age' or tokens[4] == 'salary':
                     token_str4 = f'{item[tokens[4]]} {tokens[5]} {tokens[6]}'
                     if eval(token_str4):
@@ -161,8 +161,13 @@ def evaluations(tokens, file):
                     if eval(token_str2):
                         if item in work_list1:
                             work_list2.append(item)
-
-
+                else:
+                    token_str3 = f'{item}[\'{tokens[4]}\'] {tokens[5]} \'{tokens[6].capitalize()}\''
+                    if eval(token_str3):
+                        if item in work_list1:
+                            work_list2.append(item)
+    for val in work_list2:
+        print(val)
 
 
 file1 = open_file()
@@ -173,4 +178,4 @@ file2 = open_file2()
 
 tokens_g = check_tokens(prompt, file2)
 
-# evaluations(tokens_g, file1)
+evaluations(tokens_g, file1)
