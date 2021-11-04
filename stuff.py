@@ -52,14 +52,17 @@ def check_tokens(tokens, csv_dict):
     tokens_s = tokens.split()
     if len(tokens_s) != 3 and len(tokens_s) != 7:  # and len(tokens_s) != 1:
         work = False
+        print('Invalid, input length needs to be 3 or 7')
     if len(tokens_s) == 3:
         if tokens_s[0] not in key_list:
             work = False
             print(f'{tokens_s[0]} is an invalid key')
         elif tokens_s[1] not in lo_op_list:
             work = False
+            print('Invalid operator')
         elif tokens_s[2].capitalize() not in csv_dict.get(tokens_s[0]):
             work = False
+            print('Value does not match with key')
         if tokens_s[0] == 'age' or tokens_s[0] == 'salary':
             if type(eval(tokens_s[2])) is int:
                 work = True
@@ -73,8 +76,10 @@ def check_tokens(tokens, csv_dict):
             print(f'{tokens_s[0]} is an invalid key')
         elif tokens_s[1] not in lo_op_list:
             work = False
+            print(f'{tokens_s[1]} is an invalid operator')
         elif tokens_s[2].capitalize() not in csv_dict.get(tokens_s[0]):
             work = False
+            print(f'{tokens_s[2]} does not match with {tokens_s[0]}')
         if tokens_s[0] == 'age' or tokens_s[0] == 'salary':
             if type(eval(tokens_s[2])) is int:
                 work = True
@@ -83,10 +88,13 @@ def check_tokens(tokens, csv_dict):
                 work = True
         if tokens_s[4] not in key_list:
             work = False
+            print(f'{tokens_s[4]} is an invalid key')
         elif tokens_s[5] not in lo_op_list:
             work = False
+            print(f'{tokens_s[5]} is an invalid operator')
         elif tokens_s[6] not in csv_dict.get(tokens_s[4]):
             work = False
+            print(f'{tokens_s[6]} does not match with {tokens_s[4]}')
         if tokens_s[4] == 'age' or tokens_s[4] == 'salary':
             if type(eval(tokens_s[6])) is int:
                 work = True
@@ -95,8 +103,8 @@ def check_tokens(tokens, csv_dict):
                 work = True
         if tokens_s[3] != 'and' and tokens_s[3] != 'or':
             work = False
-    else:
-        work = False
+    # else:
+    #     work = False
     if work:
         print('Valid')
         return tokens_s
@@ -177,5 +185,6 @@ file2 = open_file2()
 # print(file2)
 
 tokens_g = check_tokens(prompt, file2)
+# print(tokens_g)
 
 evaluations(tokens_g, file1)
