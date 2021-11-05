@@ -50,6 +50,7 @@ def check_tokens(tokens, csv_dict):
     key_list = ['first', 'last', 'sex', 'age', 'date', 'salary', 'position']
     lo_op_list = ['<', '>', '==', '!=', '<=', '>=']
     tokens_s = tokens.split()
+    # print(len(tokens_s))
     if len(tokens_s) != 3 and len(tokens_s) != 7:  # and len(tokens_s) != 1:
         work = False
         print('Invalid, input length needs to be 3 or 7')
@@ -57,35 +58,37 @@ def check_tokens(tokens, csv_dict):
         if tokens_s[0] not in key_list:
             work = False
             print(f'{tokens_s[0]} is an invalid key')
-        elif tokens_s[1] not in lo_op_list:
-            work = False
-            print('Invalid operator')
         elif tokens_s[2].capitalize() not in csv_dict.get(tokens_s[0]):
             work = False
-            print('Value does not match with key')
+            if tokens_s[0] != 'age' and tokens_s[0] != 'salary' and tokens_s[0] != 'date':
+                print('Value does not match with key')
         if tokens_s[0] == 'age' or tokens_s[0] == 'salary':
             if type(eval(tokens_s[2])) is int:
                 work = True
         if tokens_s[0] == 'date':
             if len(tokens_s[2]) == 10:
                 work = True
+        if tokens_s[1] not in lo_op_list:
+            work = False
+            print('Invalid operator')
     #############################
-    if len(tokens_s) == 7:
+    elif len(tokens_s) == 7:
         if tokens_s[0] not in key_list:
             work = False
             print(f'{tokens_s[0]} is an invalid key')
-        elif tokens_s[1] not in lo_op_list:
-            work = False
-            print(f'{tokens_s[1]} is an invalid operator')
         elif tokens_s[2].capitalize() not in csv_dict.get(tokens_s[0]):
             work = False
-            print(f'{tokens_s[2]} does not match with {tokens_s[0]}')
+            if tokens_s[0] != 'age' and tokens_s[0] != 'salary' and tokens_s[0] != 'date':
+                print(f'{tokens_s[2]} does not match with {tokens_s[0]}')
         if tokens_s[0] == 'age' or tokens_s[0] == 'salary':
             if type(eval(tokens_s[2])) is int:
                 work = True
         if tokens_s[0] == 'date':
             if len(tokens_s[2]) == 10:
                 work = True
+        if tokens_s[1] not in lo_op_list:
+            work = False
+            print(f'{tokens_s[1]} is an invalid operator')
         if tokens_s[4] not in key_list:
             work = False
             print(f'{tokens_s[4]} is an invalid key')
@@ -103,8 +106,9 @@ def check_tokens(tokens, csv_dict):
                 work = True
         if tokens_s[3] != 'and' and tokens_s[3] != 'or':
             work = False
-    # else:
-    #     work = False
+            print(f'{tokens_s[3]} needs to be \'and\' or \'or\'')
+    else:
+        work = False
     if work:
         print('Valid')
         return tokens_s
