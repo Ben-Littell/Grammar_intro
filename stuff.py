@@ -1,7 +1,7 @@
 # Look to the slideshow in google classroom for notes
 import csv
 
-prompt = input('Enter a query: ')
+run = True
 
 
 ########################################################################################################################
@@ -51,10 +51,12 @@ def check_tokens(tokens, csv_dict):
     lo_op_list = ['<', '>', '==', '!=', '<=', '>=']
     tokens_s = tokens.split()
     # print(len(tokens_s))
-    if len(tokens_s) != 3 and len(tokens_s) != 7:  # and len(tokens_s) != 1:
+    if len(tokens_s) != 3 and len(tokens_s) != 7 and len(tokens_s) != 1:
         work = False
         print('Invalid, input length needs to be 3 or 7')
-    if len(tokens_s) == 3:
+    if len(tokens_s) == 1:
+        work = False
+    elif len(tokens_s) == 3:
         if tokens_s[0] not in key_list:
             work = False
             print(f'{tokens_s[0]} is an invalid key')
@@ -97,21 +99,29 @@ def check_tokens(tokens, csv_dict):
             print(f'{tokens_s[5]} is an invalid operator')
         elif tokens_s[6] not in csv_dict.get(tokens_s[4]):
             work = False
-            print(f'{tokens_s[6]} does not match with {tokens_s[4]}')
+            if tokens_s[4] != 'age' and tokens_s[4] != 'salary' and tokens_s[4] != 'date':
+                print(f'{tokens_s[6]} does not match with {tokens_s[4]}')
         if tokens_s[4] == 'age' or tokens_s[4] == 'salary':
             if type(eval(tokens_s[6])) is int:
                 work = True
         if tokens_s[4] == 'date':
             if len(tokens_s[6]) == 10:
                 work = True
+            else:
+                print('Date not formatted right, MM/DD/YYYY')
         if tokens_s[3] != 'and' and tokens_s[3] != 'or':
             work = False
             print(f'{tokens_s[3]} needs to be \'and\' or \'or\'')
+    # elif len(tokens_s) == 1:
+    #     if tokens_s[0].lower() == 'exit':
+    #         run = False
     else:
         work = False
     if work:
         print('Valid')
-        return tokens_s
+        return tokens_s, work
+    else:
+        return tokens_s, work
 
 
 def evaluations(tokens, file):
@@ -120,6 +130,11 @@ def evaluations(tokens, file):
     work_list2 = []
     for item in file:
         # print(item.get(tokens[0]))
+        if len(tokens) == 1:
+            if tokens[0].lower() == 'exit':
+                return False
+            else:
+                return True
         if len(tokens) == 3:
             if tokens[0] == 'age' or tokens[0] == 'salary':
                 token_str1 = f'{item[tokens[0]]} {tokens[1]} {tokens[2]}'
@@ -178,17 +193,46 @@ def evaluations(tokens, file):
                     if eval(token_str3):
                         if item in work_list1:
                             work_list2.append(item)
+            elif tokens[3] == 'or':
+                if tokens[4] == 'age' or tokens[4] == 'salary':
+                    token_str4 = f'{item[tokens[4]]} {tokens[5]} {tokens[6]}'
+                    if eval(token_str4):
+                        if item not in work_list1:
+                            work_list2.append(item)
+                elif tokens[4] == 'date':
+                    date_split = tokens[6].split('/')
+                    new_date = date_split[2] + date_split[0] + date_split[1]
+                    date_csv_s = item[tokens[4]].split('/')
+                    new_date_csv = date_csv_s[2] + date_csv_s[0] + date_csv_s[1]
+                    token_str2 = f'{new_date_csv} {tokens[5]} {new_date}'
+                    if eval(token_str2):
+                        if item not in work_list1:
+                            work_list2.append(item)
+                else:
+                    token_str3 = f'{item}[\'{tokens[4]}\'] {tokens[5]} \'{tokens[6].capitalize()}\''
+                    if eval(token_str3):
+                        if item not in work_list1:
+                            work_list2.append(item)
+                for val in work_list1:
+                    if val not in work_list2:
+                        work_list2.append(val)
+
     for val in work_list2:
         print(val)
 
 
-file1 = open_file()
-# print(file1)
+while run:
+    prompt = input('Enter a query: ')
 
-file2 = open_file2()
-# print(file2)
+    file1 = open_file()
+    # print(file1)
 
-tokens_g = check_tokens(prompt, file2)
-# print(tokens_g)
+    file2 = open_file2()
+    # print(file2)
 
-evaluations(tokens_g, file1)
+    tokens_g, eval_y_n = check_tokens(prompt, file2)
+
+    if eval_y_n:
+        evals = evaluations(tokens_g, file1)
+    elif not evals:
+        run = False
