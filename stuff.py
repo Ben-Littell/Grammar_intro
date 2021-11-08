@@ -236,3 +236,9 @@ while run:
         evals = evaluations(tokens_g, file1)
     elif not evals:
         run = False
+    # try:
+    #     if not evals:
+    #         run = False
+    # except NameError:
+    #     continue
+
